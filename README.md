@@ -16,6 +16,7 @@ Supports http PUT requests and RPC.
 type RPCPayload struct {
 	Name string
 	Data string
-}```
+}
+```
 
 `LogInfo`
