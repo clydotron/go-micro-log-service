@@ -47,7 +47,9 @@ type App struct {
 
 func main() {
 
-	// connect to mongo"
+	// TODO make ports configurable
+
+	// connect to mongo
 	mongoClient, err := connectToMongo()
 	if err != nil {
 		log.Panic(err)
