@@ -18,7 +18,7 @@ jobs:
           go-version: '1.21.3'
       - run: mkdir dist
       - name: Compile
-        run: env GOOS=linux CGO_ENABLED=0 go build -o ./dist/logService ./...
+        run: env GOOS=linux CGO_ENABLED=0 go build -o ./dist/logService ./cmd/api
       - name: Zip it
         run: echo do stuff
       - name: release
