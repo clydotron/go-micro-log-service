@@ -10,5 +10,5 @@
 FROM alpine:latest
 
 RUN mkdir /app
-COPY ./dist/logService /app
+COPY logService /app
 CMD ["/app/logService"]
