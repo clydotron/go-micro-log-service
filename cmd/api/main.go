@@ -36,7 +36,7 @@ const (
 	rpcPort  = "5001"
 	mongoURL = "mongodb://mongo:27017"
 	//mongoURL = "mongodb://localhost:27017"
-	gRpcPort = "50001"
+	//gRpcPort = "50001"
 )
 
 var client *mongo.Client

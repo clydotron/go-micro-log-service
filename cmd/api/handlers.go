@@ -29,7 +29,7 @@ func (app *App) WriteLog(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := app.DataStore.LogRepo.Insert(event); err != nil {
-		helpers.ErrorJSON(w, err)
+		_ = helpers.ErrorJSON(w, err)
 		return
 	}
 
@@ -38,5 +38,5 @@ func (app *App) WriteLog(w http.ResponseWriter, r *http.Request) {
 		Error:   false,
 		Message: "logged",
 	}
-	helpers.WriteJSON(w, http.StatusAccepted, resp)
+	_ = helpers.WriteJSON(w, http.StatusAccepted, resp)
 }

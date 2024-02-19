@@ -65,7 +65,7 @@ var _ = Describe("Handlers", func() {
 					Data: "data",
 				}
 
-				json.NewEncoder(&body).Encode(payload)
+				_ = json.NewEncoder(&body).Encode(payload)
 
 			})
 
