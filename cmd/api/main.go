@@ -71,7 +71,7 @@ func main() {
 
 	err = rpc.Register(new(RPCServer))
 	// check the error
-	go app.rpcListen()
+	go app.rpcListen() //nolint:errcheck
 
 	// TODO move into go function
 	//app.serve()
