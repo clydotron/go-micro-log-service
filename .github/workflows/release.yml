@@ -20,23 +20,57 @@ jobs:
       - name: Compile
         run: env GOOS=linux CGO_ENABLED=0 go build -o ./dist/logService ./cmd/api
       - name: Zip it
-        run: echo do stuff
+        run: gzip -k ./dist/logService
       - name: release
         uses: actions/create-release@v1
         id: create_release
         with:
           draft: false
           prerelease: false
-          release_name: relase ${{ github.ref }}
+          release_name: release ${{ github.ref }}
           tag_name: ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Upload artifact
+      - name: Upload release artifact
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/logService
-          asset_name: logService
+          asset_path: ./dist/logService.gz
+          asset_name: logService.gz
           asset_content_type: application/gzip
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+  push_to_docker_hub:
+    needs: build_release
+    name: Build and Push image to DockerHub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+      - name: Get artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: logService
+          path: dist-files
+      - name: Display structure of downloaded files
+        run: ls -R your/destination/dir
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./log-service.dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/log-service:${{ github.ref_name }}
+
+#this needs a file from the previous step
