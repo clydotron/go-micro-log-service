@@ -19,6 +19,11 @@ jobs:
       - run: mkdir dist
       - name: Compile
         run: env GOOS=linux CGO_ENABLED=0 go build -o ./dist/logService ./cmd/api
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: logService
+          path: dist/logService
       - name: Zip it
         run: gzip -k ./dist/logService
       - name: release
@@ -40,11 +45,7 @@ jobs:
           asset_path: ./dist/logService.gz
           asset_name: logService.gz
           asset_content_type: application/gzip
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-files
-          path: dist
+
   push_to_docker_hub:
     needs: build_release
     name: Build and Push image to DockerHub
@@ -56,7 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: logService
-          path: dist-files
+          path: logService
       - name: Display structure of downloaded files
         run: ls -R your/destination/dir
       - name: Log in to Docker Hub
